@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  nodejs-app:
+    build: .
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+
+  nginx-proxy:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - nodejs-app
+    restart: unless-stopped
